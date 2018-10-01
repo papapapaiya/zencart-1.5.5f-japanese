@@ -1,11 +1,11 @@
 Zen Cart&reg; - The Art of E-Commerce
 ===============
 
-Zen Cart&reg; was the first Open Source e-Commerce web application to be fully PA-DSS Certified.
+Zen Cart&reg; PA-DSS認定を取得した最初のオープンソースの電子商取引Webアプリケーションです。
 
-Zen Cart&reg; v1.5.5 is an update with several bugfix patches applied on top of the PA-DSS Certified version v1.5.4.
+Zen Cart&reg; v1.5.5はPA-DSS認定バージョンv1.5.4の上に適用されたいくつかのバグ修正パッチを含むアップデートです。
 
-It's free software, with free community-driven support available 24/7 on the Zen Cart&reg; Support Site forums at <https://www.zen-cart.com/forum.php>
+無料のソフトウェアで、Zen Cart＆reg;で24時間無料でコミュニティサポートを利用できます。 サポートサイトのフォーラム <https://www.zen-cart.com/forum.php>
 
 --------------------
 
@@ -13,66 +13,67 @@ It's free software, with free community-driven support available 24/7 on the Zen
 Zen Cart&reg; v1.5.5f
 ---------------------
 
-Compatibility
+互換性
 -------------
-Zen Cart v1.5.5 is designed for:
- * PHP 5.6 to PHP 7.1  (but is compatible with as far back as 5.2.10), but not fully ready for PHP 7.2
+Zen Cart v1.5.5 のデザインは:
+ * PHP 5.6 to PHP 7.1  (5.2.10と互換性があります), PHP 7.2では完全に準備ができていません
  * Apache 2.2 and 2.4
- * MySQL 5.1 to 5.7 (including MariaDB 10.0 to 10.1 (only partially tested on 10.2)
+ * MySQL 5.1 to 5.7 (MariaDB 10.0〜10.1を含む (10.2では部分的にしかテストされていない)
 
 
-Installation
+インストール
 ------------
 
-Installation is simple:
+インストールは簡単です:
 
 1. [Download Zen Cart&reg;](http://sourceforge.net/projects/zencart/files)
-2. Ensure you check that the md5/sha1 hash of the Zip matches those publicly posted.
-  * The md5/sha1 values for verifying the zip files hosted at Sourceforge are displayed on the [Zen Cart&reg; website](https://www.zen-cart.com/) along with [instructions on how to verify the file using the hash values](https://www.zen-cart.com/content.php?305).
-3. Unzip the downloaded zip file 
-4. Everything inside the folder you unzipped needs to be uploaded to your webserver … for example, into your `public_html` or `www` or `html` folder (the folder will already exist on your webserver)
-5. In your browser, enter the address to your site, such as: `www.example.com` (or if you uploaded it into another subdirectory such as `foldername` use `www.example.com/foldername`)
-6. Rename the `/includes/dist-configure.php` and `/admin/includes/dist-configure.php` files to "`configure.php`" and make the files writable (so the install process can write your configuration information into them after you answer a few questions in the following steps).
-7. Also make the `/cache` and `/logs` folders writable. (You will be prompted about making other folders writable during installation)
-8. Follow the instructions that appear in your browser for installation. 
+2. Zipのmd5 / sha1ハッシュが公開されたものと一致することを確認してください。
+  * Sourceforgeでホストされているzipファイルを検証するためのmd5 / sha1の値はこちら、[Zen Cart＆reg;ウェブサイト](https://www.zen-cart.com/) 
+  * [ハッシュ値を使ってファイルを検証する方法の説明](https://www.zen-cart.com/content.php?305).
+3. ダウンロードしたzipファイルを解凍する 
+4. あなたが解凍したフォルダの中のすべてはあなたのwebserverにアップロードする必要があります。たとえば、あなたの `public_html`や` www`や `html`フォルダ（フォルダはあなたのWebサーバ上に既に存在します）
+5. あなたのブラウザで、あなたのサイトへのアドレスを入力します： `www.example.com`（または` foldername`のような別のサブディレクトリにアップロードした場合は `www.example.com / foldername`を使います）
+6. `/include/dist-configure.php`と` /admin/includes/dist-configure.php`ファイルの名前を `` configure.php` "に変更し、ファイルを書き込み可能にします（インストールプロセスはあなたの設定情報を次のステップでいくつかの質問に答えた後に）。
+7. `/cache`と` /logs`フォルダも書き込み可能にしてください。 （インストール中に他のフォルダへの書き込みを許可するように指示されます）
+8.インストールするブラウザに表示される指示に従います。
 
-If some of the terms used in these brief instructions are things you don't understand, there is a much more detailed set of instructions in the [/docs/Implementation-Guide](https://www.zen-cart.com/docs/implementation-guide-v155.pdf) PDF.
+これらの簡単な指示で使用されている用語の一部が理解できないものである場合は、[/docs/Implementation-Guide](https://www.zen-cart.com/）に詳細な手順が記載されています。 docs / implementation-guide-v155.pdf）PDF。
 
-Upgrading
+アップグレード
 ---------
-Recommended reading related to upgrading: https://www.zen-cart.com/entry.php?3
+アップグレードに関する推奨ページ: https://www.zen-cart.com/entry.php?3
 
 
-Guidance for Secure Installations
+安全なインストールのためのガイダンス
 ---------------------------------
-__The [Implementation Guide](https://www.zen-cart.com/docs/implementation-guide-v155.pdf) document is provided to give detailed instructions on how to install and secure your site in accordance with PCI Compliance requirements.__ Whether your site "needs" PCI Compliance or not is up to you to decide, but you should still follow the documented principles to maximize your site's resilience against troublesome access attempted by any undesired/unauthorized visitors.
+__[実装ガイド]（https://www.zen-cart.com/docs/implementation-guide-v155.pdf）のドキュメントは、PCIコンプライアンス要件に従ってサイトをインストールして保護する方法の詳細な説明を提供するために提供されています。あなたのサイトがPCIコンプライアンスを必要としているかどうかはあなたが決定する必要がありますが、文書化された原則に従い、望ましくない/許可されていない訪問者が試みた面倒なアクセスからサイトの回復力を最大限に引き出す必要があります。
 
 
-Documentation
+ドキュメンテーション
 -------------
-Use your browser to open the [/docs/index.html](http://www.zen-cart.com/docs/index.html) page for links to documentation and the [Implementation Guide](https://www.zen-cart.com/docs/implementation-guide-v155.pdf).
+ブラウザを使用して[/docs/index.html](http://www.zen-cart.com/docs/index.html）]ページを開き、ドキュメントと[導入ガイド]（https：//www.zen-cart.com/docs/ implementation-guide-v155.pdf）を参照。
 
 
-Developer Documentation
+開発者向けドキュメント
 -----------------------
-Developers wishing to contribute to the Zen Cart&reg; core code may fork the [zencart/zencart](https://github.com/zencart/zencart) repository on github and issue Pull Requests from their own feature branches. For detailed help on using github, forking, branching, and contributing see [Contributing to Zen Cart code](http://docs.zen-cart.com/Contributing/).
+Zen Cart＆regに貢献したい開発者。コアコードがgithub上の[zencart / zencart]（https://github.com/zencart/zencart）リポジトリをフォークし、自身のフィーチャーブランチからプルリクエストを発行することがあります。 github、フォーク、ブランチング、および寄稿の使用に関する詳細なヘルプは、[Zen Cartコードへの寄稿]（http://docs.zen-cart.com/Contributing/）を参照してください。
 
-Visit [docs.zen-cart.com](https://docs.zen-cart.com/Developer_Documentation/) for guidance on issues relevant to developers. This documentation site is very new, but content will be added over time.
+開発者に関連する問題のガイダンスについては、[docs.zen-cart.com]（https://docs.zen-cart.com/Developer_Documentation/）を参照してください。このドキュメンテーションサイトは非常に新しいですが、コンテンツは時間の経過と共に追加されます。
 
-Developers will find the standalone [Habitat VM](http://docs.zen-cart.com/Habitat/main) to be a useful tool for staging site upgrades and doing offline feature development or testing. Designers may like it for testing new templates without affecting the live site.
+開発者は、スタンドアロンの[Habitat VM]（http://docs.zen-cart.com/Habitat/main）が、サイトのアップグレードをステージングし、オフライン機能の開発やテストを行うための便利なツールであることがわかります。デザイナーは、ライブサイトに影響を与えずに新しいテンプレートをテストするのが好きかもしれません。
 
 
-Support
+サポート
 -------
-For free support, visit our support site: https://www.zen-cart.com/forum.php
+無料サポートについては、サポートサイトをご覧ください: https://www.zen-cart.com/forum.php
 
-Follow Us
+フォローする
 ---------
-For news and updates about Zen Cart&reg;, follow us on [Twitter](http://twitter.com/zencart) and [Facebook](http://facebook.com/zencart)
+Zen Cart＆regに関するニュースや最新情報については、 [Twitter](http://twitter.com/zencart)  [Facebook](http://facebook.com/zencart)
 
-Sign up for our free [Newsletter](http://eepurl.com/bafnNj)
+無料で登録する [Newsletter](http://eepurl.com/bafnNj)
 
-Subscribe to [Critical News Updates And Release Announcements](https://www.zen-cart.com/subscription.php?do=addsubscription&f=2)
+[重要なニュースの更新とリリースのお知らせ]を購読する(https://www.zen-cart.com/subscription.php?do=addsubscription&f=2)
 
 
 &nbsp;  
