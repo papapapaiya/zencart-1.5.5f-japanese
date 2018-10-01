@@ -1,0 +1,42 @@
+User-agent: *
+Disallow: /cgi-bin/
+
+#
+# 注：これは単なるサンプルファイルです。
+#
+# robots.txtファイルをまだお持ちでない場合は、このファイルの名前をrobots.txtに変更することができます
+#
+# **** このサンプルファイルを使用する場合 **** ... このファイルからすべてのコメントを削除する必要があります。 #
+
+#
+#
+# ***** Zen Cartでは、Zen Cartの通常の操作に特別な除外は必要ありません。 *****
+# ***** 検索エンジンの結果に関連するニーズに合わせて微調整やカスタマイズができますが、これは通常のZen Cart操作の範囲外です。 *****
+#
+#
+# / imagesフォルダのインデックスを作成したくない場合は:
+#   Disallow: /images
+# (行の先頭から＃を削除してください)
+#
+# ポップアップページをインデックスに登録しないようにしたい場合は、これも追加できます:
+#   Disallow: /index.php?main_page=popup_image*
+# (＃を削除してください )
+#
+# ここにプライベートフォルダをリストしないでください...そうでなければ、それらの存在はもはやプライベートではありません。
+#
+# robots.txtファイルは、/public_htmlフォルダまたは/httpdocsフォルダにあります。
+# (Zen Cartのインストールがサブフォルダ内にある場合でも). それに応じてフォルダパスを調整します。
+#
+# robots.txtファイルの設定について詳しくは、下記のURLを参照してください。:
+#  http://www.robotstxt.org/wc/exclusion.html
+#  http://ja.wikipedia.org/wiki/Robots.txt
+##
+#
+#
+# * Example robots.txt file
+# * @package main
+# * @access private
+# * @copyright Copyright 2003-2010 Zen Cart Development Team
+# * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
+# * @version $Id: robots_example.txt 18944 2011-06-14 15:53:46Z drbyte $
+#
