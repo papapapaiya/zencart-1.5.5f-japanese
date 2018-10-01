@@ -1,0 +1,27 @@
+Zen Cart(R) - The Art of E-Commerce
+
+ウェルカム Zen Cart(R) E-Commerce
+
+以下は、非常に簡素化されたインストール文書です。
+READMEのドキュメントは、/docsフォルダにあります。
+
+私たちはあなたのPDF "Implementation Guide" PDFファイルを/docsフォルダに入れてお使いになることをお勧めします。
+
+ブラウザで文書を読む場合は、/docs/index.htmlファイルから始めてください。
+
+オンラインドキュメント(英語): http://tutorials.zen-cart.com
+
+
+Zen Cartには、自動インストールシステムが組み込まれています。ただし、これを使用するには、まずコードを解凍して互換性のあるWebサーバーにアップロードする必要があります:
+
+1. Zen Cart ZIPファイルを展開する
+2. FTPプログラムを使用してZen Cartのファイルとフォルダをサーバーにアップロードする
+3. いくつかのフォルダを書き込み可能にする必要があります。詳細は/docs/Implementation-Guide.pdfにあり、HTML形式のドキュメントは/docs/フォルダにあります
+4. ブラウザに、ファイルをアップロードしたWebサイトのURL、インストーラーはhttp://domain.com/zc_install/index.phpファイルを入力します。
+5. インストーラーの指示に従ってください。インストール前にMySQLデータベースの資格情報を作成し、プロンプトが表示されたらそれらの詳細を提供する必要があります。この詳細については、導入ガイドPDFを参照してください。
+
+インストール手順の詳細については、このディストリビューションの/docs/フォルダにある実装ガイドPDFを参照してください。
+
+
+
+( (c)Copyright 2003-2016, Zen Cart(R). All rights reserved.)
