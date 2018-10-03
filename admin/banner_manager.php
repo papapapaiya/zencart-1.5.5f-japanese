@@ -43,6 +43,7 @@
 
         zen_redirect(zen_href_link(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $_GET['bID']));
         break;
+
       case 'setbanners_open_new_windows':
         if ( ($_GET['flagbanners_open_new_windows'] == '0') || ($_GET['flagbanners_open_new_windows'] == '1') ) {
           $db->Execute("update " . TABLE_BANNERS . " set banners_open_new_windows='" . $_GET['flagbanners_open_new_windows'] . "' where banners_id='" . $_GET['bID'] . "'");
@@ -54,8 +55,9 @@
 
         zen_redirect(zen_href_link(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $_GET['bID']));
         break;
-      case 'insert': // deprecated
-      case 'update': // deprecated
+
+      case 'insert': // 廃止予定
+      case 'update': // 廃止予定
       case 'add':
       case 'upd':
         if (isset($_POST['banners_id'])) $banners_id = zen_db_prepare_input($_POST['banners_id']);
@@ -127,8 +129,8 @@
             $messageStack->add_session(SUCCESS_BANNER_UPDATED, 'success');
           }
 
-// NOTE: status will be reset by the /functions/banner.php
-// build new update sql for date_scheduled, expires_date and expires_impressions
+// 注：ステータスは、 /functions/banner.php
+// date_scheduled、expires_dateおよびexpires_impressionsの新しい更新SQLを構築する
 
           $sql = "UPDATE " . TABLE_BANNERS . "
                   SET
@@ -204,7 +206,7 @@
     }
   }
 
-// check if the graphs directory exists
+// グラフディレクトリが存在するかどうかを確認する
   $dir_ok = false;
   if (function_exists('imagecreate') && zen_not_null($banner_extension)) {
     if (is_dir(DIR_WS_IMAGES . 'graphs')) {
@@ -462,7 +464,7 @@ function popupImageWindow(url) {
               </tr>
 <?php
 // Split Page
-// reset page when page is unknown
+// ページが不明なときにリセットページ
 if (($_GET['page'] == '' or $_GET['page'] == '1') and $_GET['bID'] != '') {
   $banners_query_raw = "select banners_id, banners_title, banners_image, banners_group, status, expires_date, expires_impressions, date_status_change, date_scheduled, date_added, banners_open_new_windows, banners_on_ssl, banners_sort_order from " . TABLE_BANNERS . " order by banners_title, banners_group";
   $check_page = $db->Execute($banners_query_raw);
@@ -558,7 +560,7 @@ if (($_GET['page'] == '' or $_GET['page'] == '1') and $_GET['bID'] != '') {
   $heading = array();
   $contents = array();
   switch ($action) {
-    case 'delete': // deprecated
+    case 'delete': // 廃止予定
     case 'del':
       $heading[] = array('text' => '<b>' . $bInfo->banners_title . '</b>');
 
