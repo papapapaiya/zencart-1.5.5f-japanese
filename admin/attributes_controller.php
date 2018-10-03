@@ -8,10 +8,10 @@
  */
   require('includes/application_top.php');
 
-  // troubleshooting/debug of option name/value IDs:
+  // トラブルシューティング/デバッグ　name/value  IDs:
   $show_name_numbers = true;
   $show_value_numbers = true;
-  // verify option names, values, products
+  // 確認 option names, values, products
   $chk_option_names = $db->Execute("select * from " . TABLE_PRODUCTS_OPTIONS . " where language_id='" . (int)$_SESSION['languages_id'] . "' limit 1");
   if ($chk_option_names->RecordCount() < 1) {
     $messageStack->add_session(ERROR_DEFINE_OPTION_NAMES, 'caution');
@@ -31,7 +31,7 @@
     $messageStack->add_session(ERROR_DEFINE_PRODUCTS, 'caution');
     zen_redirect(zen_href_link(FILENAME_CATEGORIES));
   }
-  // check for damaged database, caused by users indiscriminately deleting table data
+  // ユーザが無差別にテーブルデータを削除したために、データベースが壊れていないかどうかを確認する
   $ary = array();
   $chk_option_values = $db->Execute("select * from " . TABLE_PRODUCTS_OPTIONS_VALUES . " where products_options_values_id=" . (int)PRODUCTS_OPTIONS_VALUES_TEXT_ID);
   while (!$chk_option_values->EOF) {
@@ -73,7 +73,7 @@
     zen_redirect(zen_href_link(FILENAME_ATTRIBUTES_CONTROLLER, 'products_filter=' . $products_filter . '&current_category_id=' . $current_category_id));
   }
 
-// set categories and products if not set
+// 設定されていない場合はカテゴリと商品を設定する
   if ($products_filter == '' and $current_category_id != '') {
     $sql =     "select ptc.*
     from " . TABLE_PRODUCTS_TO_CATEGORIES . " ptc
@@ -171,7 +171,7 @@
           } else {
             $db->Execute("update " . TABLE_PRODUCTS_ATTRIBUTES . " set attributes_discounted='0' where products_id='" . $_GET['products_filter'] . "' and products_attributes_id='" . $_GET['attributes_id'] . "'");
           }
-          // reset products_price_sorter for searches etc.
+          // 検索のためにproducts_price_sorterをリセットする
           zen_update_products_price_sorter($_GET['products_filter']);
           zen_redirect(zen_href_link(FILENAME_ATTRIBUTES_CONTROLLER, $_SESSION['page_info'] . '&products_filter=' . $_GET['products_filter'] . '&current_category_id=' . $_GET['current_category_id']));
         }
@@ -188,7 +188,7 @@
             $db->Execute("update " . TABLE_PRODUCTS_ATTRIBUTES . " set attributes_price_base_included='0' where products_id='" . $_GET['products_filter'] . "' and products_attributes_id='" . $_GET['attributes_id'] . "'");
           }
 
-          // reset products_price_sorter for searches etc.
+          // 検索のためにproducts_price_sorterをリセットする
           zen_update_products_price_sorter($_GET['products_filter']);
 
           zen_redirect(zen_href_link(FILENAME_ATTRIBUTES_CONTROLLER, $_SESSION['page_info'] . '&products_filter=' . $_GET['products_filter'] . '&current_category_id=' . $_GET['current_category_id']));
@@ -238,16 +238,16 @@
           if (isset($_POST['values_id'][$i])) $_POST['values_id'][$i] = (int)$_POST['values_id'][$i];
           if (isset($_POST['options_id'])) $_POST['options_id'] = (int)$_POST['options_id'];
           if (isset($_POST['products_id'])) $_POST['products_id'] = (int)$_POST['products_id'];
-// check for duplicate and block them
+// 重複をチェックしてブロックする
           $check_duplicate = $db->Execute("select * from " . TABLE_PRODUCTS_ATTRIBUTES . "
                                            where products_id ='" . (int)$_POST['products_id'] . "'
                                            and options_id = '" . (int)$_POST['options_id'] . "'
                                            and options_values_id = '" . (int)$_POST['values_id'][$i] . "'");
           if ($check_duplicate->RecordCount() > 0) {
-            // do not add duplicates -- give a warning
+            // 重複を追加しない -- 警告を出す
             $messageStack->add_session(ATTRIBUTE_WARNING_DUPLICATE . ' - ' . zen_options_name($_POST['options_id']) . ' : ' . zen_values_name($_POST['values_id'][$i]), 'error');
           } else {
-// For TEXT and FILE option types, ignore option value entered by administrator and use PRODUCTS_OPTIONS_VALUES_TEXT instead.
+// TEXTおよびFILEオプションの種類については、管理者が入力したオプション値を無視し、代わりにPRODUCTS_OPTIONS_VALUES_TEXTを使用してください。
             $products_options_array = $db->Execute("select products_options_type from " . TABLE_PRODUCTS_OPTIONS . " where products_options_id = '" . $_POST['options_id'] . "'");
             $values_id = zen_db_prepare_input((($products_options_array->fields['products_options_type'] == PRODUCTS_OPTIONS_TYPE_TEXT) or ($products_options_array->fields['products_options_type'] == PRODUCTS_OPTIONS_TYPE_FILE)) ? PRODUCTS_OPTIONS_VALUES_TEXT_ID : $_POST['values_id'][$i]);
 
@@ -259,7 +259,7 @@
 
             $products_options_sort_order = zen_db_prepare_input($_POST['products_options_sort_order']);
 
-// modified options sort order to use default if not otherwise set
+// 変更されたオプション設定されていなければデフォルトをソート順で使用する
             if (zen_not_null($_POST['products_options_sort_order'])) {
               $products_options_sort_order = zen_db_prepare_input($_POST['products_options_sort_order']);
             } else {
@@ -267,7 +267,7 @@
               $products_options_sort_order = $sort_order_query->fields['products_options_values_sort_order'];
             } // end if (zen_not_null($_POST['products_options_sort_order'])
 
-// end modification for sort order
+// ソート順の最終変更
 
             $product_attribute_is_free = zen_db_prepare_input($_POST['product_attribute_is_free']);
             $products_attributes_weight = zen_db_prepare_input($_POST['products_attributes_weight']);
@@ -291,10 +291,10 @@
             $attributes_price_letters_free = zen_db_prepare_input($_POST['attributes_price_letters_free']);
             $attributes_required = zen_db_prepare_input($_POST['attributes_required']);
 
-// add - update as record exists
-// attributes images
-// when set to none remove from database
-// only processes image once for multiple selection of options_values_id
+// 追加 - レコードが存在するための更新
+// 属性画像
+// noneに設定するとデータベースから削除する
+// options_values_idを複数選択するために一度だけ画像を処理する
             if ($i == 0) {
               if (isset($_POST['attributes_image']) && zen_not_null($_POST['attributes_image']) && ($_POST['attributes_image'] != 'none')) {
                 $attributes_image = zen_db_prepare_input($_POST['attributes_image']);
@@ -363,7 +363,7 @@
           }
         }
 
-        // reset products_price_sorter for searches etc.
+        // 検索のためにproducts_price_sorterをリセットする
         zen_update_products_price_sorter($_POST['products_id']);
 
         zen_redirect(zen_href_link(FILENAME_ATTRIBUTES_CONTROLLER, $_SESSION['page_info'] . '&products_filter=' . $_POST['products_id'] . '&current_category_id=' . $_POST['current_category_id']));
@@ -379,13 +379,13 @@
           // do not add duplicates give a warning
           $messageStack->add_session(ATTRIBUTE_WARNING_DUPLICATE_UPDATE . ' - ' . zen_options_name($_POST['options_id']) . ' : ' . zen_values_name($_POST['values_id']), 'error');
         } else {
-          // Validate options_id and options_value_id
+          // options_idとoptions_value_idの検証
           if (!zen_validate_options_to_options_value($_POST['options_id'], $_POST['values_id'])) {
             // do not add invalid match
             $messageStack->add_session(ATTRIBUTE_WARNING_INVALID_MATCH_UPDATE . ' - ' . zen_options_name($_POST['options_id']) . ' : ' . zen_values_name($_POST['values_id']), 'error');
           } else {
-            // add the new attribute
-// iii 030811 added:  Enforce rule that TEXT and FILE Options use value PRODUCTS_OPTIONS_VALUES_TEXT_ID
+            // 新しい属性を追加する
+// iii 030811 added:  TEXTおよびFILEオプションで値PRODUCTS_OPTIONS_VALUES_TEXT_IDを使用するルールを適用する
         $products_options_query = $db->Execute("select products_options_type from " . TABLE_PRODUCTS_OPTIONS . " where products_options_id = '" . (int)$_POST['options_id'] . "'");
         switch ($products_options_array->fields['products_options_type']) {
           case PRODUCTS_OPTIONS_TYPE_TEXT:
@@ -428,9 +428,9 @@
 
             $attribute_id = zen_db_prepare_input($_POST['attribute_id']);
 
-// edit
-// attributes images
-// when set to none remove from database
+// 編集
+// 属性画像
+// noneに設定するとデータベースから削除する
           if (isset($_POST['attributes_image']) && zen_not_null($_POST['attributes_image']) && ($_POST['attributes_image'] != 'none')) {
             $attributes_image = zen_db_prepare_input($_POST['attributes_image']);
             $attributes_image_none = false;
@@ -500,7 +500,7 @@ if ($_POST['image_delete'] == 1) {
           }
         }
 
-        // reset products_price_sorter for searches etc.
+        // 検索のためにproducts_price_sorterをリセットする
         zen_update_products_price_sorter($_POST['products_id']);
 
         zen_redirect(zen_href_link(FILENAME_ATTRIBUTES_CONTROLLER, $_SESSION['page_info'] . '&current_category_id=' . $_POST['current_category_id']));
@@ -521,17 +521,17 @@ if ($_POST['image_delete'] == 1) {
           $db->Execute("delete from " . TABLE_PRODUCTS_ATTRIBUTES . "
                         where products_attributes_id = " . (int)$attribute_id);
 
-// added for DOWNLOAD_ENABLED. Always try to remove attributes, even if downloads are no longer enabled
+// added for DOWNLOAD_ENABLED. ダウンロードが有効になっていなくても、常に属性を削除してみてください
           $db->Execute("delete from " . TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD . "
                         where products_attributes_id = " . (int)$attribute_id);
 
-        // reset products_price_sorter for searches etc.
+        // 検索のためにproducts_price_sorterをリセットする
           zen_update_products_price_sorter($products_filter);
 
           zen_redirect(zen_href_link(FILENAME_ATTRIBUTES_CONTROLLER, $_SESSION['page_info'] . '&current_category_id=' . $_POST['current_category_id']));
         }
         break;
-// delete all attributes
+// すべての属性を削除する
       case 'delete_all_attributes':
         $zco_notifier->notify('NOTIFY_ATTRIBUTE_CONTROLLER_DELETE_ALL', array('pID' => $_POST['products_filter']));
 
@@ -540,7 +540,7 @@ if ($_POST['image_delete'] == 1) {
         $action='';
         $products_filter = (int)$_POST['products_filter'];
 
-        // reset products_price_sorter for searches etc.
+        // 検索のためにproducts_price_sorterをリセットする
         zen_update_products_price_sorter($products_filter);
 
         zen_redirect(zen_href_link(FILENAME_ATTRIBUTES_CONTROLLER, 'products_filter=' . $products_filter . '&current_category_id=' . $_POST['current_category_id']));
@@ -551,9 +551,9 @@ if ($_POST['image_delete'] == 1) {
 
         $delete_attributes_options_id = $db->Execute("select * from " . TABLE_PRODUCTS_ATTRIBUTES . " where products_id='" . $_POST['products_filter'] . "' and options_id='" . $_POST['products_options_id_all'] . "'");
         while (!$delete_attributes_options_id->EOF) {
-// remove any attached downloads
+// 添付されたダウンロードをすべて削除する
           $remove_downloads = $db->Execute("delete from " . TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD . " where products_attributes_id= '" . $delete_attributes_options_id->fields['products_attributes_id'] . "'");
-// remove all option values
+// すべてのオプション値を削除する
           $delete_attributes_options_id_values = $db->Execute("delete from " . TABLE_PRODUCTS_ATTRIBUTES . " where products_id='" . $_POST['products_filter'] . "' and options_id='" . $_POST['products_options_id_all'] . "'");
           $delete_attributes_options_id->MoveNext();
         }
@@ -562,14 +562,14 @@ if ($_POST['image_delete'] == 1) {
         $products_filter = $_POST['products_filter'];
         $messageStack->add_session(SUCCESS_ATTRIBUTES_DELETED_OPTION_NAME_VALUES. ' ID#' . zen_options_name($_POST['products_options_id_all']), 'success');
 
-        // reset products_price_sorter for searches etc.
+        // 検索のためにproducts_price_sorterをリセットする
         zen_update_products_price_sorter($products_filter);
 
         zen_redirect(zen_href_link(FILENAME_ATTRIBUTES_CONTROLLER, 'products_filter=' . $products_filter . '&current_category_id=' . $_POST['current_category_id']));
         break;
 
 
-// attributes copy to product
+// 属性を製品にコピーする
     case 'update_attributes_copy_to_product':
       $copy_attributes_delete_first = ($_POST['copy_attributes'] == 'copy_attributes_delete' ? '1' : '0');
       $copy_attributes_duplicates_skipped = ($_POST['copy_attributes'] == 'copy_attributes_ignore' ? '1' : '0');
@@ -580,7 +580,7 @@ if ($_POST['image_delete'] == 1) {
       zen_redirect(zen_href_link(FILENAME_ATTRIBUTES_CONTROLLER, 'products_filter=' . $products_filter . '&current_category_id=' . $_POST['current_category_id']));
       break;
 
-// attributes copy to category
+// 属性をカテゴリにコピーする
     case 'update_attributes_copy_to_category':
       $copy_attributes_delete_first = ($_POST['copy_attributes'] == 'copy_attributes_delete' ? '1' : '0');
       $copy_attributes_duplicates_skipped = ($_POST['copy_attributes'] == 'copy_attributes_ignore' ? '1' : '0');
@@ -602,7 +602,7 @@ if ($_POST['image_delete'] == 1) {
     }
   }
 
-//iii 031103 added to get results from database option type query
+//iii 031103 データベースオプションの種類のクエリから結果を取得するために追加されました
   $products_options_types_list = array();
 //  $products_options_type_array = $db->Execute("select products_options_types_id, products_options_types_name from " . TABLE_PRODUCTS_OPTIONS_TYPES . " where language_id='" . $_SESSION['languages_id'] . "' order by products_options_types_id");
   $products_options_type_array = $db->Execute("select products_options_types_id, products_options_types_name from " . TABLE_PRODUCTS_OPTIONS_TYPES . " order by products_options_types_id");
@@ -611,9 +611,9 @@ if ($_POST['image_delete'] == 1) {
     $products_options_type_array->MoveNext();
   }
 
-//CLR 030312 add function to draw pulldown list of option types
-// Draw a pulldown for Option Types
-//iii 031103 modified to use results of database option type query from above
+//CLR 030312 オプションのプルダウンリストを描画する関数を追加する
+// オプションタイプのプルダウンを描画する
+//iii 031103 上記のデータベースオプション型クエリの結果を使用するように修正
 function draw_optiontype_pulldown($name, $default = '') {
   global $products_options_types_list;
   $values = array();
@@ -623,9 +623,9 @@ function draw_optiontype_pulldown($name, $default = '') {
   return zen_draw_pull_down_menu($name, $values, $default);
 }
 
-//CLR 030312 add function to translate type_id to name
-// Translate option_type_values to english string
-//iii 031103 modified to use results of database option type query from above
+//CLR 030312 type_idをnameに変換する関数を追加
+// option_type_valuesを英語の文字列に変換する
+//iii 031103 上記のデータベースオプション型クエリの結果を使用するように修正
 function translate_type_to_name($opt_type) {
   global $products_options_types_list;
   return $products_options_types_list[$opt_type];
@@ -831,7 +831,7 @@ if ($action == 'attributes_preview') {
 ?>
 
 <?php
-// remove all attributes from the product
+// 製品からすべての属性を削除する
   if ($action == 'delete_all_attributes_confirm') {
 ?>
       <tr><form name="delete_all"<?php echo 'action="' . zen_href_link(FILENAME_ATTRIBUTES_CONTROLLER, 'action=delete_all_attributes') . '"'; ?> method="post"><?php echo zen_draw_hidden_field('products_filter', $_GET['products_filter']); ?><?php echo zen_draw_hidden_field('current_category_id', $_GET['current_category_id']); ?><?php echo zen_draw_hidden_field('securityToken', $_SESSION['securityToken']); ?>
@@ -851,7 +851,7 @@ if ($action == 'attributes_preview') {
 ?>
 
 <?php
-// remove option name and all values from the product
+// オプション名とすべての値を製品から削除する
   if ($action == 'delete_option_name_values_confirm') {
 ?>
       <tr><form name="delete_all"<?php echo 'action="' . zen_href_link(FILENAME_ATTRIBUTES_CONTROLLER, 'action=delete_option_name_values') . '"'; ?> method="post"><?php echo zen_draw_hidden_field('securityToken', $_SESSION['securityToken']); ?>
@@ -879,7 +879,7 @@ if ($action == 'attributes_preview') {
 <?php
   if ($action == 'attribute_features_copy_to_product') {
     $_GET['products_update_id'] = '';
-    // excluded current product from the pull down menu of products
+    // 現在の製品をプルダウンメニューから除外
     $products_exclude_array = array();
     $products_exclude_array[] = $products_filter;
 ?>
@@ -928,8 +928,8 @@ if ($action == 'attributes_preview') {
 ?>
 
 <?php
-// fix here
-// preview shot of attributes
+// ここで修正する
+// 属性のプレビュー
 if ($action == 'attributes_preview') {
   $_GET['products_id'] = $products_filter;
   $pInfo = new stdClass();
@@ -1009,7 +1009,7 @@ if ($options_attributes_image[$i] != '') {
         <td colspan="2" class="main" align="center" height= "40" valign="middle"><?php echo '<a href="' . zen_href_link(FILENAME_ATTRIBUTES_CONTROLLER, 'products_filter=' . $products_filter . '&current_category_id=' . $current_category_id . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')) . '">' . zen_image_button('button_cancel.gif', IMAGE_CANCEL) . '</a>'; ?></td>
       </tr>
 <?php
-} // eof: attributes preview
+} // eof: 属性プレビュー
 ?>
 
       <tr>
@@ -1018,9 +1018,9 @@ if ($options_attributes_image[$i] != '') {
 
 <?php
 if ($action == 'attributes_preview') {
-  // don't show anything from here down
+  // 非表示
 } else {
-  // show the attributes
+  // 表示
 ?>
 <?php
   if ($action == '') {
@@ -1063,7 +1063,7 @@ if ($action == 'attributes_preview') {
   } // $action == ''
 ?>
 <?php
-// start of attributes display
+// 属性表示の開始
 if ($_GET['products_filter'] == '') {
 ?>
       <tr>
@@ -1072,7 +1072,7 @@ if ($_GET['products_filter'] == '') {
 <?php
 } else {
 ////
-// attribute listings and add
+// 属性リストと追加
 
   if ($action == 'update_attribute') {
     $form_action = 'update_product_attribute';
@@ -1121,7 +1121,7 @@ if ($action == '') {
   </td>
 <?php } ?>
 <?php
-// fix here border width
+// ボーダー幅を固定する
 ?>
       <tr>
         <td><form name="attributes" action="<?php echo zen_href_link(FILENAME_ATTRIBUTES_CONTROLLER, 'action=' . $form_action . (isset($_GET['option_page']) ? '&option_page=' . $_GET['option_page'] . '&' : '') . (isset($_GET['value_page']) ? '&value_page=' . $_GET['value_page'] . '&' : '') . (isset($_GET['attribute_page']) ? '&attribute_page=' . $_GET['attribute_page'] : '') . '&products_filter=' . $products_filter ); ?>" method="post" enctype="multipart/form-data"><?php echo zen_draw_hidden_field('securityToken', $_SESSION['securityToken']); ?><table border="0" cellspacing="0" cellpadding="2">
@@ -1150,12 +1150,12 @@ if ($action == '') {
   }
   $num_pages = (int) $num_pages;
 
-// fix limit error on some versions
+// 一部のバージョンで制限エラーを修正
     if ($attribute_page_start < 0) { $attribute_page_start = 0; }
 
   $attributes = $attributes . " LIMIT $attribute_page_start, $per_page";
 
-  // Previous
+  // 前
   if ($prev_attribute_page) {
     echo '<a href="' . zen_href_link(FILENAME_ATTRIBUTES_CONTROLLER, 'attribute_page=' . $prev_attribute_page . '&products_filter=' . $products_filter) . '"> &lt;&lt; </a> | ';
   }
@@ -1168,7 +1168,7 @@ if ($action == '') {
     }
   }
 
-  // Next
+  // 次
   if ($_GET['attribute_page'] != $num_pages) {
     echo '<a href="' . zen_href_link(FILENAME_ATTRIBUTES_CONTROLLER, 'attribute_page=' . $next_attribute_page . '&products_filter=' . $products_filter) . '"> &gt;&gt; </a>';
   }
@@ -1229,7 +1229,7 @@ if ($action == '') {
 <?php } ?>
 <?php
   $current_options_name = '';
-  // get products tax id
+  // 商品税IDを取得する
   $product_check = $db->Execute("select products_tax_class_id from " . TABLE_PRODUCTS . " where products_id = '" . $products_filter . "'" . " limit 1");
 //  echo '$products_filter: ' . $products_filter . ' tax id: ' . $product_check->fields['products_tax_class_id'] . '<br>';
   while (!$attributes_values->EOF) {
@@ -1241,7 +1241,7 @@ if ($action == '') {
     $values_name = zen_values_name($attributes_values->fields['options_values_id']);
     $rows++;
 
-// delete all option name values
+// すべてのオプション名の値を削除する
     if ($current_options_name != $options_name) {
       $current_options_name = $options_name;
 ?>
@@ -1300,7 +1300,7 @@ if ($action == '') {
             </td>
             <td class="smallText">&nbsp;<?php echo TABLE_HEADING_OPT_VALUE . '<br />'; ?><select name="values_id" size="10">
 <?php
-// FIX HERE 2 - editing
+// FIX HERE 2  - 編集
       $values_values = $db->Execute("select pov.* from " . TABLE_PRODUCTS_OPTIONS_VALUES . " pov left join " . TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS . " povtpo on pov.products_options_values_id = povtpo.products_options_values_id
                                      where pov.language_id ='" . (int)$_SESSION['languages_id'] . "'
                                      and povtpo.products_options_id='" . $attributes_values->fields['options_id'] . "'
@@ -1328,40 +1328,40 @@ if ($action == '') {
       case '1': $on_attributes_display_only = true; $off_attributes_display_only = false; break;
       default: $on_attributes_display_only = false; $off_attributes_display_only = true;
     }
-// set radio values attributes_default
+// ラジオボタンを設定 attributes_default
     switch ($attributes_values->fields['product_attribute_is_free']) {
       case '0': $on_product_attribute_is_free = false; $off_product_attribute_is_free = true; break;
       case '1': $on_product_attribute_is_free = true; $off_product_attribute_is_free = false; break;
       default: $on_product_attribute_is_free = false; $off_product_attribute_is_free = true;
     }
-// set radio values attributes_default
+// ラジオボタンを設定 attributes_default
     switch ($attributes_values->fields['attributes_default']) {
       case '0': $on_attributes_default = false; $off_attributes_default = true; break;
       case '1': $on_attributes_default = true; $off_attributes_default = false; break;
       default: $on_attributes_default = false; $off_attributes_default = true;
     }
-// set radio values attributes_discounted
+// ラジオボタンを設定 attributes_discounted
     switch ($attributes_values->fields['attributes_discounted']) {
       case '0': $on_attributes_discounted = false; $off_attributes_discounted = true; break;
       case '1': $on_attributes_discounted = true; $off_attributes_discounted = false; break;
       default: $on_attributes_discounted = false; $off_attributes_discounted = true;
     }
-// set radio values attributes_price_base_included
+// ラジオボタンを設定 attributes_price_base_included
     switch ($attributes_values->fields['attributes_price_base_included']) {
       case '0': $on_attributes_price_base_included = false; $off_attributes_price_base_included = true; break;
       case '1': $on_attributes_price_base_included = true; $off_attributes_price_base_included = false; break;
       default: $on_attributes_price_base_included = false; $off_attributes_price_base_included = true;
     }
-// set radio values attributes_required
+// ラジオボタンを設定 attributes_required
     switch ($attributes_values->fields['attributes_required']) {
       case '0': $on_attributes_required = false; $off_attributes_required = true; break;
       case '1': $on_attributes_required = true; $off_attributes_required = false; break;
       default: $on_attributes_required = false; $off_attributes_required = true;
     }
-// set image overwrite
+// イメージの上書きを設定する
   $on_overwrite = true;
   $off_overwrite = false;
-// set image delete
+// 画像を削除する
   $on_image_delete = false;
   $off_image_delete = true;
 
@@ -1370,7 +1370,7 @@ if ($action == '') {
 
 </table></td></tr>
 
-<!-- bof: Edit Prices -->
+<!-- bof: 価格を編集する -->
 <tr>
   <td class="attributeBoxContent">
     <table border="1" cellpadding="4" cellspacing="2" align="left" width="100%">
@@ -1458,7 +1458,7 @@ if ($action == '') {
     } // ATTRIBUTES_ENABLED_TEXT_PRICES
 ?>
 
-<!-- eof: Edit Prices -->
+<!-- eof: 価格を編集する -->
 
 <tr><td class="attributeBoxContent">
 <table border="1" cellpadding="4" cellspacing="2">
@@ -1478,8 +1478,8 @@ if ($action == '') {
 <?php if (ATTRIBUTES_ENABLED_IMAGES == 'true') { ?>
 
 <?php
-// edit
-// attributes images
+// 編集
+// 属性画像
   $dir_info = zen_build_subdirectories_array(DIR_FS_CATALOG_IMAGES);
   if ($attributes_values->fields['attributes_image'] != '') {
     $default_directory = substr( $attributes_values->fields['attributes_image'], 0,strpos( $attributes_values->fields['attributes_image'], '/')+1);
@@ -1587,9 +1587,9 @@ if ($action == '') {
           <tr>
 <?php
     } else {
-// attributes display listing
+// 属性を表示するリスト
 
-// calculate current total attribute price
+// 現在の総属性価格を計算する
 // $attributes_values
 $attributes_price_final = zen_get_attributes_price_final($attributes_values->fields["products_attributes_id"], 1, $attributes_values, 'false');
 $attributes_price_final_value = $attributes_price_final;
@@ -1647,7 +1647,7 @@ if ($action == '') {
   }
 ?>
 <?php
-// bof: show filename if it exists
+// bof: 存在する場合はファイル名を表示する
       if (DOWNLOAD_ENABLED == 'true') {
         $download_display_query_raw ="select products_attributes_filename, products_attributes_maxdays, products_attributes_maxcount
                               from " . TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD . "
@@ -1684,7 +1684,7 @@ if ($action == '') {
 <?php
         } // show downloads
       }
-// eof: show filename if it exists
+// eof: 存在する場合はファイル名を表示する
 ?>
 <?php
     }
@@ -1694,7 +1694,7 @@ if ($action == '') {
     $next_id = $max_attributes_id_values->fields['next_id'];
 
 //////////////////////////////////////////////////////////////
-// BOF: Add dividers between Product Names and between Option Names
+// BOF: 製品名とオプション名の間にディバイダを追加する
     $attributes_values->MoveNext();
     if (!$attributes_values->EOF) {
       if ($current_attributes_products_id != $attributes_values->fields['products_id']) {
@@ -1719,7 +1719,7 @@ if ($action == '') {
     }
   }
 }
-// EOF: Add dividers between Product Names and between Option Names
+// EOF: 製品名とオプション名の間にディバイダを追加する
 //////////////////////////////////////////////////////////////
 ?>
           </tr>
@@ -1761,7 +1761,7 @@ if ($action == '') {
     </td>
   </tr>
 
-<!-- bof Option Names and Values -->
+<!-- bof オプションの名前と値 -->
   <tr class="attributeBoxContent">
     <td class="pageHeading">
       <table border='0' width="100%">
@@ -1802,18 +1802,18 @@ if ($action == '') {
 
 <script language="javascript" type="text/javascript"><!--
   function update_option(theForm) {
-    // if nothing to do, abort
+    // 何もしなければ、中止する
     if (!theForm || !theForm.elements["options_id"] || !theForm.elements["values_id[]"]) return;
     if (!theForm.options_id.options[theForm.options_id.selectedIndex]) return;
 
     // enable hourglass
     document.body.style.cursor = "wait";
 
-    // set initial values
+    // 初期値を設定する
     var SelectedOption = theForm.options_id.options[theForm.options_id.selectedIndex].value;
     var theField = document.getElementById("OptionValue");
 
-    // reset the array of pulldown options so it can be repopulated
+    // 再投入できるようにプルダウンオプションの配列をリセットする
     var Opts = theField.options.length;
     while(Opts > 0) {
       Opts = Opts - 1;
@@ -1830,7 +1830,7 @@ if ($action == '') {
 <?php
 
 $chk_defaults = $db->Execute("select products_type from " . TABLE_PRODUCTS . " where products_id=" . $products_filter);
-// set defaults for adding attributes
+// 属性を追加するためのデフォルトを設定する
 
 $on_product_attribute_is_free = (zen_get_show_product_switch($products_filter, 'ATTRIBUTE_IS_FREE', 'DEFAULT_', '') == 1 ? true : false);
 $off_product_attribute_is_free = ($on_product_attribute_is_free == 1 ? false : true);
@@ -1850,7 +1850,7 @@ $default_price_prefix = ($default_price_prefix == 1 ? '+' : ($default_price_pref
 $default_products_attributes_weight_prefix  = zen_get_show_product_switch($products_filter, 'PRODUCTS_ATTRIBUTES_WEIGHT_PREFIX', 'DEFAULT_', '');
 $default_products_attributes_weight_prefix  = ($default_products_attributes_weight_prefix  == 1 ? '+' : ($default_products_attributes_weight_prefix == 2 ? '-' : ''));
 
-// set defaults for copying
+// コピーのデフォルトを設定する
 $on_overwrite = true;
 $off_overwrite = false;
 ?>
@@ -1862,9 +1862,9 @@ $off_overwrite = false;
       </table>
     </td>
   </tr>
-<!-- eof Option Name and Value -->
+<!-- eof オプション名と値 -->
 
-<!-- bof Prices and Weight -->
+<!-- bof 価格と重量 -->
   <tr><td class="attributeBoxContent"><table border="0" cellpadding="4" cellspacing="2">
     <tr>
       <td colspan="2" class="pageHeading"><?php echo TEXT_PRICES_AND_WEIGHTS; ?></td>
@@ -1923,9 +1923,9 @@ $off_overwrite = false;
 
   </table></td></tr>
 
-<!-- eof Option Name and Value -->
+<!-- eof 価格と重量 -->
 
-<!-- bof Attribute Flags -->
+<!-- bof 属性フラグ -->
 <tr class="attributeBoxContent">
   <td class="pageHeading">
     <table border='0' width="100%">
@@ -1949,17 +1949,17 @@ $off_overwrite = false;
     </table>
   </td>
 </tr>
-<!-- eof Attribute Flags -->
+<!-- eof 属性フラグ -->
 
 <?php if (ATTRIBUTES_ENABLED_IMAGES == 'true') { ?>
 <?php
-// add
-// attributes images
+// 追加
+// 属性画像
   $dir_info = zen_build_subdirectories_array(DIR_FS_CATALOG_IMAGES);
   $default_directory = 'attributes/';
 ?>
 
-<!-- bof Attribute Images -->
+<!-- bof 属性画像 -->
 <tr class="attributeBoxContent">
   <td class="pageHeading">
     <table border='0' width="100%">
@@ -2003,7 +2003,7 @@ $off_overwrite = false;
     </table>
   </td>
 </tr>
-<!-- eof Attribute Images -->
+<!-- eof 属性画像 -->
 <?php } // ATTRIBUTES_ENABLED_IMAGES ?>
 
 <?php
@@ -2071,7 +2071,7 @@ $off_overwrite = false;
 </table></td></tr>
 <!-- eof_adding -->
 
-<!-- products_attributes_eof //-->
+<!-- 商品属性_eof //-->
 </table>
 <!-- body_text_eof //-->
 <!-- footer //-->
