@@ -9,11 +9,11 @@
 
 require('includes/application_top.php');
 
-// initialise form values
+// フォームの値を初期化
 $page_key = $language_key = $main_page = $page_params = $menu_key = $checked = '';
 $sort_order = 0;
 
-// check if we are receiving form content and if so validate and process it
+// フォームコンテンツを受信して​​いるかどうかを確認し、フォームコンテンツを検証して処理しているかどうかを確認
 if (isset($_POST) && !empty($_POST))
 {
   $error = FALSE;
@@ -79,20 +79,20 @@ if (isset($_POST) && !empty($_POST))
 
   if (!$error)
   {
-    // register page
+    // 登録ページ
     zen_register_admin_page($page_key, $language_key, $main_page, $page_params, $menu_key, $display_on_menu, $sort_order);
 
-    // prepare success message
+    // 成功のメッセージを作成
     $messageStack->add(SUCCESS_ADMIN_PAGE_REGISTERED, 'success');
 
-    // reset form values
+    // フォームの値をリセットする
     $page_key = $language_key = $main_page = $page_params = $menu_key = $checked = '';
     $sort_order = 0;
   }
 
 }
 
-// prepare options for menu pulldown
+// メニュープルダウンのオプションを作成する
 $menu_titles = zen_get_menu_titles();
 $menu_options = array();
 $menu_options[0] = array('id' => NULL, 'text' => TEXT_SELECT_MENU);
