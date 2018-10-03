@@ -27,7 +27,7 @@
 
   $banner_extension = zen_banner_image_extension();
 
-// check if the graphs directory exists
+// グラフディレクトリが存在するかどうかを確認する
   $dir_ok = false;
   if (function_exists('imagecreate') && zen_not_null($banner_extension)) {
     if (is_dir(DIR_WS_IMAGES . 'graphs')) {
