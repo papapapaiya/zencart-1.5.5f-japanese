@@ -8,14 +8,14 @@
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
  * @version GIT: $Id: Author: DrByte  Jun 30 2014 Modified in v1.5.4 $
  *
- * @TODO: prettify so on-screen output is more friendly, perhaps adding pagination support etc (using existing "s" and "p" params)
- * @TODO: prettify by hiding postdata until requested, either with hidden layers or other means
- * @TODO: Consider streaming to file line-by-line as an alternate output method in case of RAM blowout with large data quantities or low RAM config on servers.
+ * @TODO: 画面上の出力がよりフレンドリーになるようにしましょう。おそらくページングのサポートなどを追加する（既存の "s"と "p"パラメータを使用）
+ * @TODO: 隠されたレイヤーまたは他の手段のいずれかで、要求されるまでポストデータを隠す
+ * @TODO: 大量のデータ量を必要とするRAMブローアウトやサーバー上のRAM構成が低い場合には、代替出力方法として行ごとにストリーミングすることを検討してください。
  */
 require ('includes/application_top.php');
 
 
-// change destination here for path when using "save to file on server"
+// 「サーバー上のファイルに保存」を使用する場合は、パスの宛先をここで変更します。
 if (! defined('DIR_FS_ADMIN_ACTIVITY_EXPORT')) define('DIR_FS_ADMIN_ACTIVITY_EXPORT', DIR_FS_ADMIN . 'backups/');
 
 $action = (isset($_GET['action']) ? $_GET['action'] : '');
