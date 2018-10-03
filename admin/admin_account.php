@@ -11,11 +11,11 @@ require('includes/application_top.php');
 if (file_exists(DIR_WS_LANGUAGES . $_SESSION['language'] . '/' . 'users.php')) {
   include(DIR_WS_LANGUAGES . $_SESSION['language'] . '/' . 'users.php');
 }
-// Check if session has timed out
+// セッションがタイムアウトしたかどうかを確認する
 if (!isset($_SESSION['admin_id'])) zen_redirect(zen_href_link(FILENAME_LOGIN, '', 'SSL'));
 $user = $_SESSION['admin_id'];
 
-// determine whether an action has been requested
+// アクションが要求されているかどうかを判断する
 if (isset($_POST['action']) && in_array($_POST['action'], array('update','reset'))) {
   $action = $_POST['action'];
 } elseif (isset($_GET['action']) && in_array($_GET['action'], array('edit','password'))) {
@@ -23,22 +23,22 @@ if (isset($_POST['action']) && in_array($_POST['action'], array('update','reset'
 } else {
   $action = '';
 }
-// validate form input as not expired and not spoofed
+// 期限切れではなくスプーフィングされていないとしてフォーム入力を検証する
 if ($action != '' && isset($_POST['action']) && $_POST['action'] != '' && $_POST['securityToken'] != $_SESSION['securityToken']) {
   $messageStack->add_session(ERROR_TOKEN_EXPIRED_PLEASE_RESUBMIT, 'error');
   zen_redirect(zen_href_link(FILENAME_ADMIN_ACCOUNT));
 }
 
-// act upon any specific action specified
+// 指定された特定のアクションに基づく
 switch ($action) {
-  case 'edit': // display populated form for editing existing user
+  case 'edit': // 既存のユーザーを編集するための入力フォームを表示する
     $formAction = 'update';
     $profilesList = array_merge(array(array('id'=>0,'text'=>'Choose Profile')), zen_get_profiles());
     break;
-  case 'password': // display unpopulated form for resetting existing user's password
+  case 'password': // 既存のユーザーのパスワードをリセットするための未記載のフォームを表示する
     $formAction = 'reset';
     break;
-  case 'update': // update existing user's details in database. Post data is prep'd for db in the first function call
+  case 'update': // 既存のユーザーの詳細をデータベースに更新します。最初の関数呼び出しでは、postデータはdbに対してprepされます。
     $errors = zen_update_user(FALSE, $_POST['email'], $_SESSION['admin_id'], null);
     if (sizeof($errors) > 0)
     {
@@ -55,7 +55,7 @@ switch ($action) {
       $messageStack->add(SUCCESS_USER_DETAILS_UPDATED, 'success');
     }
     break;
-  case 'reset': // reset existing user's password in database. Post data is prep'd for db in the first function call
+  case 'reset': // 既存のユーザーのパスワードをデータベースにリセットします。最初の関数呼び出しでは、postデータはdbに対してprepされます。
     $errors = zen_reset_password($_SESSION['admin_id'], $_POST['password'], $_POST['confirm']);
     if (sizeof($errors) > 0)
     {
@@ -71,7 +71,7 @@ switch ($action) {
       $messageStack->add(SUCCESS_PASSWORD_UPDATED, 'success');
     }
     break;
-  default: // no action, simply drop through and display existing users
+  default: // アクションはありません。既存のユーザーをドロップして表示するだけです
 }
 
 // get this user's details
